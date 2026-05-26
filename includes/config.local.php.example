@@ -1,0 +1,8 @@
+<?php
+// Hostinger database credentials override
+// Copy this file to config.local.php and fill in your actual credentials.
+$host = 'localhost';
+$dbname = 'your_hostinger_dbname';
+$username = 'your_hostinger_username';
+$password = 'your_hostinger_password';
+?>

@@ -1,8 +1,13 @@
 <?php
 $host = 'localhost';
-$dbname = 'rkseducation'; // Change this on Hostinger
-$username = 'root'; // Change this on Hostinger
-$password = ''; // Change this on Hostinger
+$dbname = 'rkseducation'; 
+$username = 'root'; 
+$password = ''; 
+
+// Load Hostinger/production database credentials if config.local.php exists
+if (file_exists(__DIR__ . '/config.local.php')) {
+    include __DIR__ . '/config.local.php';
+}
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
