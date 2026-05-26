@@ -18,6 +18,94 @@ try {
     $page = false;
 }
 
+// Programmatic SEO Fallback if not found in database
+if (!$page) {
+    if (preg_match('/^class-([0-9]+)-foundation-program-in-ganaur$/i', $slug, $matches)) {
+        $classNum = $matches[1];
+        $className = "Class " . $classNum;
+        $title = "Class {$classNum} Foundation Program in Ganaur";
+        $page = [
+            'id' => 9000 + $classNum,
+            'slug' => $slug,
+            'category' => 'Foundation Program',
+            'class_name' => $className,
+            'subject' => '',
+            'title' => $title,
+            'meta_title' => "Best Class {$classNum} Foundation Program in Ganaur | RKS Institute",
+            'meta_description' => "Join the best Class {$classNum} foundation program in Ganaur at RKS Temple of Education. Concept-first learning, expert tutors, and small batches.",
+            'h1' => $title,
+            'content' => "<p>Welcome to our Class {$classNum} Foundation Program. RKS Temple of Education in Ganaur offers the best conceptual training for Class {$classNum} students to build a strong foundation.</p><p>Our program is designed to nurture young minds, improve analytical thinking, and establish regular self-study habits.</p>",
+            'faq' => json_encode([
+                ['question' => 'What is the fee for this program?', 'answer' => 'Please contact our counselor for detailed fee structures and demo sessions.'],
+                ['question' => 'Do you provide study materials?', 'answer' => 'Yes, we provide comprehensive, concept-first study materials and assignments.'],
+                ['question' => 'Where is the institute located?', 'answer' => 'We are located at Railway Rd, near court complex, opposite Chirag Garden, Ganaur, Haryana.']
+            ]),
+            'status' => 'published',
+            'featured' => 0,
+            'is_index' => 1,
+            'canonical_url' => '',
+            'seo_schema' => '',
+            'meta_keywords' => "class {$classNum} foundation, foundation course ganaur, rks education"
+        ];
+    } elseif (preg_match('/^class-([0-9]+)-coaching-in-ganaur$/i', $slug, $matches)) {
+        $classNum = $matches[1];
+        $className = "Class " . $classNum;
+        $title = "Class {$classNum} Coaching in Ganaur";
+        $page = [
+            'id' => 8000 + $classNum,
+            'slug' => $slug,
+            'category' => 'Science Coaching',
+            'class_name' => $className,
+            'subject' => '',
+            'title' => $title,
+            'meta_title' => "Best Class {$classNum} Coaching in Ganaur | RKS Institute",
+            'meta_description' => "Top Class {$classNum} coaching and tuition in Ganaur at RKS Temple of Education. Excel in school exams and prepare for competitive exams.",
+            'h1' => $title,
+            'content' => "<p>Welcome to our Class {$classNum} Coaching Program. RKS Temple of Education in Ganaur offers top-tier coaching for Class {$classNum} students to excel in their academic journey.</p><p>We focus on concept-first learning, board exam blueprints, and competitive exam readiness.</p>",
+            'faq' => json_encode([
+                ['question' => 'What subjects are covered?', 'answer' => 'We cover Mathematics, Physics, Chemistry, and other core subjects depending on the class level.'],
+                ['question' => 'Are there regular tests?', 'answer' => 'Yes, we conduct weekly test series and board pattern assessments.'],
+                ['question' => 'Can we book a free demo?', 'answer' => 'Absolutely. Contact us to schedule your free demo session today.']
+            ]),
+            'status' => 'published',
+            'featured' => 0,
+            'is_index' => 1,
+            'canonical_url' => '',
+            'seo_schema' => '',
+            'meta_keywords' => "class {$classNum} coaching, class {$classNum} tuition ganaur, rks education"
+        ];
+    } elseif (preg_match('/^class-([0-9]+)-([a-zA-Z0-9-]+)-(coaching|tuition)-in-ganaur$/i', $slug, $matches)) {
+        $classNum = $matches[1];
+        $subjectSlug = $matches[2];
+        $type = ucfirst($matches[3]); // Coaching or Tuition
+        $subject = ucfirst(str_replace('-', ' ', $subjectSlug));
+        $className = "Class " . $classNum;
+        $title = "Class {$classNum} {$subject} {$type} in Ganaur";
+        $page = [
+            'id' => 7000 + ($classNum * 10) + strlen($subject),
+            'slug' => $slug,
+            'category' => 'Science Coaching',
+            'class_name' => $className,
+            'subject' => $subject,
+            'title' => $title,
+            'meta_title' => "Best Class {$classNum} {$subject} {$type} in Ganaur | RKS Institute",
+            'meta_description' => "Top Class {$classNum} {$subject} {$type} in Ganaur at RKS Temple of Education. Master key concepts with expert educators.",
+            'h1' => $title,
+            'content' => "<p>Master Class {$classNum} {$subject} with RKS Temple of Education in Ganaur. Our specialized {$type} classes ensure deep understanding of concepts, step-by-step numerical solving, and board exam preparation.</p>",
+            'faq' => json_encode([
+                ['question' => 'Do you cover CBSE/HBSE syllabus?', 'answer' => 'Yes, we follow the latest CBSE and state board syllabi closely.'],
+                ['question' => 'What is the batch size?', 'answer' => 'We keep our batches small to ensure personalized attention for every student.']
+            ]),
+            'status' => 'published',
+            'featured' => 0,
+            'is_index' => 1,
+            'canonical_url' => '',
+            'seo_schema' => '',
+            'meta_keywords' => "class {$classNum} {$subject} {$type}, {$subject} tuition ganaur, rks education"
+        ];
+    }
+}
+
 // Block draft pages from public access
 if ($page && isset($page['status']) && $page['status'] === 'draft') {
     // Allow admin preview via ?preview=1 if admin session exists
@@ -30,54 +118,22 @@ if ($page && isset($page['status']) && $page['status'] === 'draft') {
 // Handle 404 if page not found
 if (!$page) {
     header("HTTP/1.1 404 Not Found");
+    $page_title = 'Page Not Found | RKS Temple Of Education';
+    $meta_description = 'The page you are looking for does not exist or has been moved.';
+    $active_page = '404';
+    $extra_head = '';
+    include 'includes/header.php';
     ?>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Page Not Found | RKS Temple Of Education</title>
-        <link rel="icon" type="image/png" href="assets/images/logo.png">
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="assets/css/style.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    </head>
-    <body>
-        <header class="header" id="header">
-            <div class="container">
-                <div class="nav-container">
-                    <a href="index.php" class="logo">
-                        <img src="assets/images/logo.png" alt="RKS Temple Of Education Logo">
-                        <span>RKS Temple Of Education</span>
-                    </a>
-                    <nav class="nav-menu" id="nav-menu">
-                        <ul>
-                            <li><a href="index.php#hero">Home</a></li>
-                            <li><a href="index.php#about">About</a></li>
-                            <li><a href="blogs.php">Blogs</a></li>
-                            <li><a href="index.php#contact">Contact</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </header>
-        <main style="padding-top: 100px; min-height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center;">
-            <div class="container">
-                <h1 style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;">404</h1>
-                <h2 style="margin-bottom: 1.5rem;">Oops! Page Not Found</h2>
-                <p style="color: var(--text-light); margin-bottom: 2rem;">The page you are looking for does not exist or has been moved.</p>
-                <a href="index.php" class="btn btn-primary">Go Back Home</a>
-            </div>
-        </main>
-        <footer class="footer">
-            <div class="footer-bottom text-center" style="border-top: none; padding-bottom: 2rem;">
-                <p>&copy; <?php echo date("Y"); ?> RKS Temple Of Education. All Rights Reserved.</p>
-            </div>
-        </footer>
-    </body>
-    </html>
+    <main style="padding-top: 100px; min-height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center;">
+        <div class="container">
+            <h1 style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;">404</h1>
+            <h2 style="margin-bottom: 1.5rem;">Oops! Page Not Found</h2>
+            <p style="color: var(--text-light); margin-bottom: 2rem;">The page you are looking for does not exist or has been moved.</p>
+            <a href="index.php" class="btn btn-primary">Go Back Home</a>
+        </div>
+    </main>
     <?php
+    include 'includes/footer.php';
     exit;
 }
 
