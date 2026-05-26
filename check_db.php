@@ -1,5 +1,5 @@
 <?php
-require 'public_html/includes/db.php';
+require 'includes/db.php';
 try {
     $stmt = $pdo->query("SHOW TABLES");
     $tables = $stmt->fetchAll(PDO::FETCH_COLUMN);
